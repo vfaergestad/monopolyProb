@@ -106,7 +106,7 @@ while True:
                 comChestCardList = list(copyComChestCardList)
                 comChestCardsDrawn = 0
 
-#       find land spot and add to result list
+#       find landing spot and add to result list
         newPos = streetsList[newPosIndex]
         resultList.append(newPos)
 
