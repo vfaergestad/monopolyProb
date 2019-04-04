@@ -1,4 +1,4 @@
-#while True:
+while True:
 #   import lists from other files
     from streets import streetsList
     from chanceCards import chanceCardList
