@@ -1,14 +1,19 @@
-while True:
+#while True:
+#   import lists from other files
     from streets import streetsList
     from chanceCards import chanceCardList
     from comChestCards import comChestCardList
     import random
 
+#   creating copies of chance- and comChestLists
     copyChanceCardList = list(chanceCardList)
     copyComChestCardList = list(comChestCardList)
+
+#   creating the Result list and the ProbabilityList
     resultList = []
     probList = []
 
+#   User input Throws amount and to show or not show each move
     print("Welcome to this Monopoly Probability program. How many throws do you want to make?")
     runs = int(input())
 
@@ -19,12 +24,14 @@ while True:
     else:
         show = False
 
+#   defining original values for different variables
     newPosIndex = 0
     throws = 0
     chanceCardsDrawn = 0
     comChestCardsDrawn = 0
     progress = 0
 
+#   start loop
     for _ in range(runs):
         same1 = False
         same2 = False
@@ -34,7 +41,7 @@ while True:
         throw = dice1 + dice2
         throws += 1
         if show == True:
-            print(throw)
+            print("Rolled " + str(throw))
 
 #       Two of same dice
         if dice1 == dice2 and same2 == True:
@@ -44,65 +51,86 @@ while True:
         if dice1 == dice2:
             same1 == True
 
-#       move
+#       general movement
         posIndex = newPosIndex
         pos = streetsList[posIndex]
         if show == True:
-            print(pos)
+            print("Moved from " + pos)
         if same2 == False:
             newPosIndex = posIndex + throw
         if newPosIndex > 39:
             diff = newPosIndex - 40
             newPosIndex = 0 + diff
 
-#       chance card draw
+#       move when chance card draw
         if newPosIndex == 7 or newPosIndex == 22 or newPosIndex == 36:
             cardDraw = random.randint(0, (len(chanceCardList)-1))
-#            print("Kort du trakk: " + str(chanceCardList[cardDraw]))
             if cardDraw == 0:
+                newPos = streetsList[newPosIndex]
+                resultList.append(newPos)
                 newPosIndex = 0
             if cardDraw == 1:
+                newPos = streetsList[newPosIndex]
+                resultList.append(newPos)
                 newPosIndex = 21
             if cardDraw == 2:
+                newPos = streetsList[newPosIndex]
+                resultList.append(newPos)
                 newPosIndex = 11
             if cardDraw == 3:
                 if newPosIndex == 7 or newPosIndex == 36:
+                    newPos = streetsList[newPosIndex]
+                    resultList.append(newPos)
                     newPosIndex = 12
                 if newPosIndex == 22:
+                    newPos = streetsList[newPosIndex]
+                    resultList.append(newPos)
                     newPosIndex = 28
             if cardDraw == 4 or cardDraw == 5:
                 if newPosIndex == 7:
+                    newPos = streetsList[newPosIndex]
+                    resultList.append(newPos)
                     newPosIndex = 15
                 if newPosIndex == 22:
+                    newPos = streetsList[newPosIndex]
+                    resultList.append(newPos)
                     newPosIndex = 25
                 if newPosIndex == 36:
+                    newPos = streetsList[newPosIndex]
+                    resultList.append(newPos)
                     newPosIndex = 5
             if cardDraw == 6:
+                newPos = streetsList[newPosIndex]
+                resultList.append(newPos)
                 newPosIndex -= 3
             if cardDraw == 7:
+                newPos = streetsList[newPosIndex]
+                resultList.append(newPos)
                 newPosIndex = 10
             chanceCardList.pop(cardDraw)
-#            print(chanceCardList)
             chanceCardsDrawn += 1
             if chanceCardsDrawn == 16:
                 chanceCardList = list(copyChanceCardList)
                 chanceCardsDrawn = 0
 
-#       com chest cards draw
+#       move when com chest cards draw
         if newPosIndex == 2 or newPosIndex == 17 or newPosIndex == 33:
             cardDraw = random.randint(0, (len(comChestCardList) - 1))
-#            print("Kort du trakk: " + str(comChestCardList[cardDraw]))
             if cardDraw == 0:
+                newPos = streetsList[newPosIndex]
+                resultList.append(newPos)
                 newPosIndex = 0
             if cardDraw == 1:
+                newPos = streetsList[newPosIndex]
+                resultList.append(newPos)
                 newPosIndex = 10
             comChestCardList.pop(cardDraw)
-#            print(comChestCardList)
             comChestCardsDrawn += 1
             if comChestCardsDrawn == 16:
                 comChestCardList = list(copyComChestCardList)
                 comChestCardsDrawn = 0
 
+#       find landing spot and add to result list
         newPos = streetsList[newPosIndex]
         resultList.append(newPos)
 
@@ -111,8 +139,9 @@ while True:
             newPosIndex = 10
 #       show end position
         if show == True:
-            print(newPos)
+            print("Moved to " + newPos)
 
+#       show progress
         progress += 1
         print(progress)
 
@@ -132,10 +161,10 @@ while True:
         print(str(prob) + '\t\t\t' + street)
 
 #   run again?
-    print("Want to run the program again? Y/N")
-    answ = input()
-    if answ == "Y":
-        print("Letsgo then")
-    else:
-        print("k bye")
-        exit()
+#    print("Want to run the program again? Y/N")
+#    answ = input()
+#    if answ == "Y":
+#        print("Letsgo then")
+#    else:
+#        print("k bye")
+#        exit()
