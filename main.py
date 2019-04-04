@@ -1,4 +1,4 @@
-while True:
+#while True:
 #   import lists from other files
     from streets import streetsList
     from chanceCards import chanceCardList
@@ -66,26 +66,46 @@ while True:
         if newPosIndex == 7 or newPosIndex == 22 or newPosIndex == 36:
             cardDraw = random.randint(0, (len(chanceCardList)-1))
             if cardDraw == 0:
+                newPos = streetsList[newPosIndex]
+                resultList.append(newPos)
                 newPosIndex = 0
             if cardDraw == 1:
+                newPos = streetsList[newPosIndex]
+                resultList.append(newPos)
                 newPosIndex = 21
             if cardDraw == 2:
+                newPos = streetsList[newPosIndex]
+                resultList.append(newPos)
                 newPosIndex = 11
             if cardDraw == 3:
                 if newPosIndex == 7 or newPosIndex == 36:
+                    newPos = streetsList[newPosIndex]
+                    resultList.append(newPos)
                     newPosIndex = 12
                 if newPosIndex == 22:
+                    newPos = streetsList[newPosIndex]
+                    resultList.append(newPos)
                     newPosIndex = 28
             if cardDraw == 4 or cardDraw == 5:
                 if newPosIndex == 7:
+                    newPos = streetsList[newPosIndex]
+                    resultList.append(newPos)
                     newPosIndex = 15
                 if newPosIndex == 22:
+                    newPos = streetsList[newPosIndex]
+                    resultList.append(newPos)
                     newPosIndex = 25
                 if newPosIndex == 36:
+                    newPos = streetsList[newPosIndex]
+                    resultList.append(newPos)
                     newPosIndex = 5
             if cardDraw == 6:
+                newPos = streetsList[newPosIndex]
+                resultList.append(newPos)
                 newPosIndex -= 3
             if cardDraw == 7:
+                newPos = streetsList[newPosIndex]
+                resultList.append(newPos)
                 newPosIndex = 10
             chanceCardList.pop(cardDraw)
             chanceCardsDrawn += 1
@@ -97,8 +117,12 @@ while True:
         if newPosIndex == 2 or newPosIndex == 17 or newPosIndex == 33:
             cardDraw = random.randint(0, (len(comChestCardList) - 1))
             if cardDraw == 0:
+                newPos = streetsList[newPosIndex]
+                resultList.append(newPos)
                 newPosIndex = 0
             if cardDraw == 1:
+                newPos = streetsList[newPosIndex]
+                resultList.append(newPos)
                 newPosIndex = 10
             comChestCardList.pop(cardDraw)
             comChestCardsDrawn += 1
