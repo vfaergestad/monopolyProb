@@ -9,7 +9,7 @@ while True:
     copyChanceCardList = list(chanceCardList)
     copyComChestCardList = list(comChestCardList)
 
-#   creating the Result list and the Probabilitylist
+#   creating the Result list and the ProbabilityList
     resultList = []
     probList = []
 
@@ -41,7 +41,7 @@ while True:
         throw = dice1 + dice2
         throws += 1
         if show == True:
-            print(throw)
+            print("Rolled " + str(throw))
 
 #       Two of same dice
         if dice1 == dice2 and same2 == True:
@@ -55,7 +55,7 @@ while True:
         posIndex = newPosIndex
         pos = streetsList[posIndex]
         if show == True:
-            print(pos)
+            print("Moved from " + pos)
         if same2 == False:
             newPosIndex = posIndex + throw
         if newPosIndex > 39:
@@ -115,7 +115,7 @@ while True:
             newPosIndex = 10
 #       show end position
         if show == True:
-            print(newPos)
+            print("Moved to " + newPos)
 
 #       show progress
         progress += 1
@@ -137,10 +137,10 @@ while True:
         print(str(prob) + '\t\t\t' + street)
 
 #   run again?
-    print("Want to run the program again? Y/N")
-    answ = input()
-    if answ == "Y":
-        print("Letsgo then")
-    else:
-        print("k bye")
-        exit()
+#    print("Want to run the program again? Y/N")
+#    answ = input()
+#    if answ == "Y":
+#        print("Letsgo then")
+#    else:
+#        print("k bye")
+#        exit()
