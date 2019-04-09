@@ -7,15 +7,15 @@ import PySimpleGUI as sg
 
 layout = [
     [sg.Text("How many throws do you want to make?")],
-    [sg.Input()],
-    [sg.Checkbox("Show Moves"), sg.Checkbox("Show Progress"), sg.Checkbox("Jail")],
-    [sg.Checkbox("Triple Dice Jail"), sg.Checkbox("Community Chest Cards"), sg.Checkbox("Chance Cards")],
+    [sg.Input(1000)],
+    [sg.Checkbox("Show Moves"), sg.Checkbox("Show Progress")],
+    [sg.Checkbox("Jail"), sg.Checkbox("Triple Dice Jail"), sg.Checkbox("Community Chest Cards"), sg.Checkbox("Chance Cards")],
     [sg.Text("(Showing Progress will make the calculation slower)")],
-    [sg.Submit("Run"), sg.ReadButton("Read")]
+    [sg.Submit("Run"), sg.Cancel()]
 ]
 
 
-window = sg.Window("Test ass").Layout(layout)
+window = sg.Window("Monopoly Probability").Layout(layout)
 button, values = window.Read()
 
 #   User input Throws amount and to show or not show each move
