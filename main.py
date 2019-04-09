@@ -1,49 +1,64 @@
-while True:
 #   import lists from other files
-    from streets import streetsList
-    from chanceCards import chanceCardList
-    from comChestCards import comChestCardList
-    import random
+from streets import streetsList
+from chanceCards import chanceCardList
+from comChestCards import comChestCardList
+import random
+import PySimpleGUI as sg
 
-#   creating copies of chance- and comChestLists
-    copyChanceCardList = list(chanceCardList)
-    copyComChestCardList = list(comChestCardList)
+layout = [
+    [sg.Text("How many throws do you want to make?")],
+    [sg.Input()],
+    [sg.Checkbox("Show Moves"), sg.Checkbox("Show Progress"), sg.Checkbox("Jail")],
+    [sg.Checkbox("Triple Dice Jail"), sg.Checkbox("Community Chest Cards"), sg.Checkbox("Chance Cards")],
+    [sg.Text("(Showing Progress will make the calculation slower)")],
+    [sg.Submit("Run"), sg.ReadButton("Read")]
+]
 
-#   creating the Result list and the ProbabilityList
-    resultList = []
-    probList = []
+
+window = sg.Window("Test ass").Layout(layout)
+button, values = window.Read()
 
 #   User input Throws amount and to show or not show each move
-    print("Welcome to this Monopoly Probability program. How many throws do you want to make?")
-    runs = int(input())
 
-    print("Do you want to see all the moves? Y/N (Not recommended for more than 100 moves.)")
-    answ = input()
-    if answ == "Y":
-        showMoves = True
-    else:
-        showMoves = False
+runs = int(values[0])
+showMoves = values[1]
+showProgress = values[2]
+jail = values[3]
+tripleJail = values[4]
+comChestCards = values[5]
+chanceCards = values[6]
+
+#   creating copies of chance- and comChestLists
+copyChanceCardList = list(chanceCardList)
+copyComChestCardList = list(comChestCardList)
+
+#   creating the Result list and the ProbabilityList
+resultList = []
+probList = []
 
 #   defining original values for different variables
-    newPosIndex = 0
-    throws = 0
-    chanceCardsDrawn = 0
-    comChestCardsDrawn = 0
-    progress = 0
+newPosIndex = 0
+throws = 0
+chanceCardsDrawn = 0
+comChestCardsDrawn = 0
+progress = 0
+
+
 
 #   start loop
-    for _ in range(runs):
-        same1 = False
-        same2 = False
+for _ in range(runs):
+    same1 = False
+    same2 = False
 #       throw dice
-        dice1 = random.randint(1, 6)
-        dice2 = random.randint(1, 6)
-        throw = dice1 + dice2
-        throws += 1
-        if showMoves == True:
-            print("Rolled " + str(throw))
+    dice1 = random.randint(1, 6)
+    dice2 = random.randint(1, 6)
+    throw = dice1 + dice2
+    throws += 1
+    if showMoves == True:
+        print("Rolled " + str(throw))
 
 #       Two of same dice
+    if tripleJail == True:
         if dice1 == dice2 and same2 == True:
             newPosIndex = 10
         if dice1 == dice2 and same1 == True:
@@ -52,19 +67,20 @@ while True:
             same1 = True
 
 #       general movement
-        posIndex = newPosIndex
-        pos = streetsList[posIndex]
-        if showMoves == True:
-            print("Moved from " + pos)
-        if same2 == False:
-            newPosIndex = posIndex + throw
-        if same2 == True:
-            newPosIndex = 10
-        if newPosIndex > 39:
-            diff = newPosIndex - 40
-            newPosIndex = 0 + diff
+    posIndex = newPosIndex
+    pos = streetsList[posIndex]
+    if showMoves == True:
+        print("Moved from " + pos)
+    if same2 == False:
+        newPosIndex = posIndex + throw
+    if same2 == True:
+        newPosIndex = 10
+    if newPosIndex > 39:
+        diff = newPosIndex - 40
+        newPosIndex = 0 + diff
 
 #       move when chance card draw
+    if chanceCards == True:
         if newPosIndex == 7 or newPosIndex == 22 or newPosIndex == 36:
             cardDraw = random.randint(0, (len(chanceCardList)-1))
             if cardDraw == 0:
@@ -116,6 +132,7 @@ while True:
                 chanceCardsDrawn = 0
 
 #       move when com chest cards draw
+    if comChestCards == True:
         if newPosIndex == 2 or newPosIndex == 17 or newPosIndex == 33:
             cardDraw = random.randint(0, (len(comChestCardList) - 1))
             if cardDraw == 0:
@@ -133,34 +150,40 @@ while True:
                 comChestCardsDrawn = 0
 
 #       find landing spot and add to result list
-        newPos = streetsList[newPosIndex]
-        resultList.append(newPos)
+    newPos = streetsList[newPosIndex]
+    resultList.append(newPos)
 
 #       move - land on prison
+    if jail == True:
         if newPosIndex == 30:
             newPosIndex = 10
-#       show end position
+    #       show end position
         if showMoves == True:
             print("Moved to " + newPos)
 
 #       show progress
+    if showProgress == True:
+        sg.OneLineProgressMeter('One Line Meter Example', progress, runs, 'key')
         progress += 1
         print(progress)
 
 #   create Probability list
-    for x in streetsList:
-        streetOccur = resultList.count(x)
-        streetProb = float(float(streetOccur / throws) * 100)
-        probList.append(streetProb)
+for x in streetsList:
+    streetOccur = resultList.count(x)
+    streetProb = float(float(streetOccur / throws) * 100)
+    probList.append(streetProb)
 
 #   sort, zip and reverse results
-    resultsFinal = sorted(zip(probList, streetsList))
-    resultsFinal.reverse()
+resultsFinal = sorted(zip(probList, streetsList))
+resultsFinal.reverse()
 
 #   Show results
+def Results():
     print('Prob \t\tStreet')
     for prob, street in resultsFinal:
         print(str(prob) + '\t\t\t' + street)
+
+sg.Popup(Results(), values)
 
 #   run again?
 #    print("Want to run the program again? Y/N")
