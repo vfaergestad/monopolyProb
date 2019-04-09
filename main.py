@@ -20,9 +20,9 @@ while True:
     print("Do you want to see all the moves? Y/N (Not recommended for more than 100 moves.)")
     answ = input()
     if answ == "Y":
-        show = True
+        showMoves = True
     else:
-        show = False
+        showMoves = False
 
 #   defining original values for different variables
     newPosIndex = 0
@@ -40,24 +40,26 @@ while True:
         dice2 = random.randint(1, 6)
         throw = dice1 + dice2
         throws += 1
-        if show == True:
+        if showMoves == True:
             print("Rolled " + str(throw))
 
 #       Two of same dice
         if dice1 == dice2 and same2 == True:
             newPosIndex = 10
         if dice1 == dice2 and same1 == True:
-            same2 == True
+            same2 = True
         if dice1 == dice2:
-            same1 == True
+            same1 = True
 
 #       general movement
         posIndex = newPosIndex
         pos = streetsList[posIndex]
-        if show == True:
+        if showMoves == True:
             print("Moved from " + pos)
         if same2 == False:
             newPosIndex = posIndex + throw
+        if same2 == True:
+            newPosIndex = 10
         if newPosIndex > 39:
             diff = newPosIndex - 40
             newPosIndex = 0 + diff
@@ -138,7 +140,7 @@ while True:
         if newPosIndex == 30:
             newPosIndex = 10
 #       show end position
-        if show == True:
+        if showMoves == True:
             print("Moved to " + newPos)
 
 #       show progress
