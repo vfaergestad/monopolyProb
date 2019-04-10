@@ -168,7 +168,7 @@ for _ in range(runs):
 #   create Probability list
 for x in streetsList:
     streetOccur = resultList.count(x)
-    streetProb = float(float(streetOccur / throws) * 100)
+    streetProb = "%.2f" % float(float(streetOccur / throws) * 100)
     probList.append(streetProb)
 
 #   sort, zip and reverse results
@@ -178,11 +178,43 @@ resultsFinal.reverse()
 #   Show results
 
 
-    print('Prob \t\tStreet')
-    for prob, street in resultsFinal:
-        print(str(prob) + '\t\t\t' + street)
+print('Prob \t\tStreet')
+for prob, street in resultsFinal:
+    print(str(prob) + '        ' + street)
 
-sg.Popup(Results(), values)
+showResultsList = []
+
+for prob, street in resultsFinal:
+    showResultsList.append(str(prob) + '      ' + street)
+
+
+resultsLayout = [
+                [sg.Text('Prob \t\t\tStreet')],
+                [sg.Text(showResultsList[0], size=(15, 1)), sg.Text(showResultsList[20])],
+                [sg.Text(showResultsList[1], size=(15, 1)), sg.Text(showResultsList[21])],
+                [sg.Text(showResultsList[2], size=(15, 1)), sg.Text(showResultsList[22])],
+                [sg.Text(showResultsList[3], size=(15, 1)), sg.Text(showResultsList[23])],
+                [sg.Text(showResultsList[4], size=(15, 1)), sg.Text(showResultsList[24])],
+                [sg.Text(showResultsList[5], size=(15, 1)), sg.Text(showResultsList[25])],
+                [sg.Text(showResultsList[6], size=(15, 1)), sg.Text(showResultsList[26])],
+                [sg.Text(showResultsList[7], size=(15, 1)), sg.Text(showResultsList[26])],
+                [sg.Text(showResultsList[8], size=(15, 1)), sg.Text(showResultsList[28])],
+                [sg.Text(showResultsList[9], size=(15, 1)), sg.Text(showResultsList[29])],
+                [sg.Text(showResultsList[10], size=(15, 1)), sg.Text(showResultsList[30])],
+                [sg.Text(showResultsList[11], size=(15, 1)), sg.Text(showResultsList[31])],
+                [sg.Text(showResultsList[12], size=(15, 1)), sg.Text(showResultsList[32])],
+                [sg.Text(showResultsList[13], size=(15, 1)), sg.Text(showResultsList[33])],
+                [sg.Text(showResultsList[14], size=(15, 1)), sg.Text(showResultsList[34])],
+                [sg.Text(showResultsList[15], size=(15, 1)), sg.Text(showResultsList[35])],
+                [sg.Text(showResultsList[16], size=(15, 1)), sg.Text(showResultsList[36])],
+                [sg.Text(showResultsList[17], size=(15, 1)), sg.Text(showResultsList[37])],
+                [sg.Text(showResultsList[18], size=(15, 1)), sg.Text(showResultsList[38])],
+                [sg.Text(showResultsList[19], size=(15, 1)), sg.Text(showResultsList[39])],
+]
+
+resultWindow = sg.Window("Results").Layout(resultsLayout)
+resultWindow.Read()
+
 
 #   run again?
 #    print("Want to run the program again? Y/N")
