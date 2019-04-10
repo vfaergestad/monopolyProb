@@ -43,8 +43,6 @@ chanceCardsDrawn = 0
 comChestCardsDrawn = 0
 progress = 0
 
-
-
 #   start loop
 for _ in range(runs):
     same1 = False
@@ -178,7 +176,8 @@ resultsFinal = sorted(zip(probList, streetsList))
 resultsFinal.reverse()
 
 #   Show results
-def Results():
+
+
     print('Prob \t\tStreet')
     for prob, street in resultsFinal:
         print(str(prob) + '\t\t\t' + street)
