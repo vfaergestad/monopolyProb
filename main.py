@@ -3,23 +3,27 @@ from streets import streetsList
 from chanceCards import chanceCardList
 from comChestCards import comChestCardList
 import random
-import PySimpleGUI as sg
+import PySimpleGUI as Sg
 
+# Creating input layout
 layout = [
-    [sg.Text("How many throws do you want to make?")],
-    [sg.Input(1000)],
-    [sg.Checkbox("Show Moves"), sg.Checkbox("Show Progress")],
-    [sg.Checkbox("Jail"), sg.Checkbox("Triple Dice Jail"), sg.Checkbox("Community Chest Cards"), sg.Checkbox("Chance Cards")],
-    [sg.Text("(Showing Progress will make the calculation slower)")],
-    [sg.Submit("Run"), sg.Cancel()]
+    [Sg.Text("How many throws do you want to make?")],
+    [Sg.Input(1000)],
+    [Sg.Checkbox("Show Moves"), Sg.Checkbox("Show Progress")],
+    [Sg.Checkbox("Jail", default=True), Sg.Checkbox("Triple Dice Jail", default=True),
+     Sg.Checkbox("Community Chest Cards", default=True), Sg.Checkbox("Chance Cards", default=True)],
+    [Sg.Text("(Showing Progress will make the calculation slower)")],
+    [Sg.Submit("Run"), Sg.CloseButton("Exit")]
 ]
 
-
-window = sg.Window("Monopoly Probability").Layout(layout)
+# Showing input window
+window = Sg.Window("Monopoly Probability").Layout(layout)
 button, values = window.Read()
 
-#   User input Throws amount and to show or not show each move
+if button == "Exit":
+    exit()
 
+# Defining user inputs
 runs = int(values[0])
 showMoves = values[1]
 showProgress = values[2]
@@ -52,14 +56,14 @@ for _ in range(runs):
     dice2 = random.randint(1, 6)
     throw = dice1 + dice2
     throws += 1
-    if showMoves == True:
+    if showMoves:
         print("Rolled " + str(throw))
 
 #       Two of same dice
-    if tripleJail == True:
-        if dice1 == dice2 and same2 == True:
+    if tripleJail:
+        if dice1 == dice2 and same2:
             newPosIndex = 10
-        if dice1 == dice2 and same1 == True:
+        if dice1 == dice2 and same1:
             same2 = True
         if dice1 == dice2:
             same1 = True
@@ -67,18 +71,18 @@ for _ in range(runs):
 #       general movement
     posIndex = newPosIndex
     pos = streetsList[posIndex]
-    if showMoves == True:
+    if showMoves:
         print("Moved from " + pos)
-    if same2 == False:
+    if not same2:
         newPosIndex = posIndex + throw
-    if same2 == True:
+    if same2:
         newPosIndex = 10
     if newPosIndex > 39:
         diff = newPosIndex - 40
         newPosIndex = 0 + diff
 
 #       move when chance card draw
-    if chanceCards == True:
+    if chanceCards:
         if newPosIndex == 7 or newPosIndex == 22 or newPosIndex == 36:
             cardDraw = random.randint(0, (len(chanceCardList)-1))
             if cardDraw == 0:
@@ -130,7 +134,7 @@ for _ in range(runs):
                 chanceCardsDrawn = 0
 
 #       move when com chest cards draw
-    if comChestCards == True:
+    if comChestCards:
         if newPosIndex == 2 or newPosIndex == 17 or newPosIndex == 33:
             cardDraw = random.randint(0, (len(comChestCardList) - 1))
             if cardDraw == 0:
@@ -152,16 +156,16 @@ for _ in range(runs):
     resultList.append(newPos)
 
 #       move - land on prison
-    if jail == True:
+    if jail:
         if newPosIndex == 30:
             newPosIndex = 10
     #       show end position
-        if showMoves == True:
+        if showMoves:
             print("Moved to " + newPos)
 
 #       show progress
-    if showProgress == True:
-        sg.OneLineProgressMeter('One Line Meter Example', progress, runs, 'key')
+    if showProgress:
+        Sg.OneLineProgressMeter('One Line Meter Example', progress, runs, 'key')
         progress += 1
         print(progress)
 
@@ -176,51 +180,37 @@ resultsFinal = sorted(zip(probList, streetsList))
 resultsFinal.reverse()
 
 #   Show results
-
-
 print('Prob \t\tStreet')
 for prob, street in resultsFinal:
     print(str(prob) + '        ' + street)
 
 showResultsList = []
-
 for prob, street in resultsFinal:
     showResultsList.append(str(prob) + '      ' + street)
 
-
 resultsLayout = [
-                [sg.Text('Prob \t\t\tStreet')],
-                [sg.Text(showResultsList[0], size=(15, 1)), sg.Text(showResultsList[20])],
-                [sg.Text(showResultsList[1], size=(15, 1)), sg.Text(showResultsList[21])],
-                [sg.Text(showResultsList[2], size=(15, 1)), sg.Text(showResultsList[22])],
-                [sg.Text(showResultsList[3], size=(15, 1)), sg.Text(showResultsList[23])],
-                [sg.Text(showResultsList[4], size=(15, 1)), sg.Text(showResultsList[24])],
-                [sg.Text(showResultsList[5], size=(15, 1)), sg.Text(showResultsList[25])],
-                [sg.Text(showResultsList[6], size=(15, 1)), sg.Text(showResultsList[26])],
-                [sg.Text(showResultsList[7], size=(15, 1)), sg.Text(showResultsList[26])],
-                [sg.Text(showResultsList[8], size=(15, 1)), sg.Text(showResultsList[28])],
-                [sg.Text(showResultsList[9], size=(15, 1)), sg.Text(showResultsList[29])],
-                [sg.Text(showResultsList[10], size=(15, 1)), sg.Text(showResultsList[30])],
-                [sg.Text(showResultsList[11], size=(15, 1)), sg.Text(showResultsList[31])],
-                [sg.Text(showResultsList[12], size=(15, 1)), sg.Text(showResultsList[32])],
-                [sg.Text(showResultsList[13], size=(15, 1)), sg.Text(showResultsList[33])],
-                [sg.Text(showResultsList[14], size=(15, 1)), sg.Text(showResultsList[34])],
-                [sg.Text(showResultsList[15], size=(15, 1)), sg.Text(showResultsList[35])],
-                [sg.Text(showResultsList[16], size=(15, 1)), sg.Text(showResultsList[36])],
-                [sg.Text(showResultsList[17], size=(15, 1)), sg.Text(showResultsList[37])],
-                [sg.Text(showResultsList[18], size=(15, 1)), sg.Text(showResultsList[38])],
-                [sg.Text(showResultsList[19], size=(15, 1)), sg.Text(showResultsList[39])],
+                [Sg.Text('Prob \t\t\tStreet')],
+                [Sg.Text(showResultsList[0], size=(15, 1)), Sg.Text(showResultsList[20])],
+                [Sg.Text(showResultsList[1], size=(15, 1)), Sg.Text(showResultsList[21])],
+                [Sg.Text(showResultsList[2], size=(15, 1)), Sg.Text(showResultsList[22])],
+                [Sg.Text(showResultsList[3], size=(15, 1)), Sg.Text(showResultsList[23])],
+                [Sg.Text(showResultsList[4], size=(15, 1)), Sg.Text(showResultsList[24])],
+                [Sg.Text(showResultsList[5], size=(15, 1)), Sg.Text(showResultsList[25])],
+                [Sg.Text(showResultsList[6], size=(15, 1)), Sg.Text(showResultsList[26])],
+                [Sg.Text(showResultsList[7], size=(15, 1)), Sg.Text(showResultsList[26])],
+                [Sg.Text(showResultsList[8], size=(15, 1)), Sg.Text(showResultsList[28])],
+                [Sg.Text(showResultsList[9], size=(15, 1)), Sg.Text(showResultsList[29])],
+                [Sg.Text(showResultsList[10], size=(15, 1)), Sg.Text(showResultsList[30])],
+                [Sg.Text(showResultsList[11], size=(15, 1)), Sg.Text(showResultsList[31])],
+                [Sg.Text(showResultsList[12], size=(15, 1)), Sg.Text(showResultsList[32])],
+                [Sg.Text(showResultsList[13], size=(15, 1)), Sg.Text(showResultsList[33])],
+                [Sg.Text(showResultsList[14], size=(15, 1)), Sg.Text(showResultsList[34])],
+                [Sg.Text(showResultsList[15], size=(15, 1)), Sg.Text(showResultsList[35])],
+                [Sg.Text(showResultsList[16], size=(15, 1)), Sg.Text(showResultsList[36])],
+                [Sg.Text(showResultsList[17], size=(15, 1)), Sg.Text(showResultsList[37])],
+                [Sg.Text(showResultsList[18], size=(15, 1)), Sg.Text(showResultsList[38])],
+                [Sg.Text(showResultsList[19], size=(15, 1)), Sg.Text(showResultsList[39])],
 ]
 
-resultWindow = sg.Window("Results").Layout(resultsLayout)
+resultWindow = Sg.Window("Results").Layout(resultsLayout)
 resultWindow.Read()
-
-
-#   run again?
-#    print("Want to run the program again? Y/N")
-#    answ = input()
-#    if answ == "Y":
-#        print("Letsgo then")
-#    else:
-#        print("k bye")
-#        exit()
