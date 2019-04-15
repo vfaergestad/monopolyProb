@@ -9,7 +9,7 @@ import PySimpleGUI as Sg
 layout = [
     [Sg.Text("How many throws do you want to make?")],
     [Sg.Input(1000)],
-    [Sg.Checkbox("Show Moves"), Sg.Checkbox("Show Progress")],
+    [Sg.Checkbox("Show Moves"), Sg.Checkbox("Show Progress"), Sg.Checkbox("Show Streets Only")],
     [Sg.Checkbox("Jail", default=True), Sg.Checkbox("Triple Dice Jail", default=True),
      Sg.Checkbox("Community Chest Cards", default=True), Sg.Checkbox("Chance Cards", default=True)],
     [Sg.Text("(Showing Progress will make the calculation slower)")],
@@ -27,10 +27,11 @@ if button == "Exit":
 runs = int(values[0])
 showMoves = values[1]
 showProgress = values[2]
-jail = values[3]
-tripleJail = values[4]
-comChestCards = values[5]
-chanceCards = values[6]
+showOnlyStreets = values[3]
+jail = values[4]
+tripleJail = values[5]
+comChestCards = values[6]
+chanceCards = values[7]
 
 #   creating copies of chance- and comChestLists
 copyChanceCardList = list(chanceCardList)
@@ -169,11 +170,41 @@ for _ in range(runs):
         progress += 1
         print(progress)
 
+        progressLayout = []
+
 #   create Probability list
 for x in streetsList:
     streetOccur = resultList.count(x)
     streetProb = "%.2f" % float(float(streetOccur / throws) * 100)
     probList.append(streetProb)
+
+#   delete all non-streets
+if showOnlyStreets:
+    del probList[38]
+    del probList[36]
+    del probList[33]
+    del probList[7]
+    del probList[30]
+    del probList[22]
+    del probList[20]
+    del probList[17]
+    del probList[10]
+    del probList[4]
+    del probList[2]
+    del probList[0]
+
+    del streetsList[38]
+    del streetsList[36]
+    del streetsList[33]
+    del streetsList[30]
+    del streetsList[22]
+    del streetsList[20]
+    del streetsList[17]
+    del streetsList[10]
+    del streetsList[7]
+    del streetsList[4]
+    del streetsList[2]
+    del streetsList[0]
 
 #   sort, zip and reverse results
 resultsFinal = sorted(zip(probList, streetsList))
@@ -188,29 +219,48 @@ showResultsList = []
 for prob, street in resultsFinal:
     showResultsList.append(str(prob) + '      ' + street)
 
-resultsLayout = [
-                [Sg.Text('Prob \t\t\tStreet')],
-                [Sg.Text(showResultsList[0], size=(15, 1)), Sg.Text(showResultsList[20])],
-                [Sg.Text(showResultsList[1], size=(15, 1)), Sg.Text(showResultsList[21])],
-                [Sg.Text(showResultsList[2], size=(15, 1)), Sg.Text(showResultsList[22])],
-                [Sg.Text(showResultsList[3], size=(15, 1)), Sg.Text(showResultsList[23])],
-                [Sg.Text(showResultsList[4], size=(15, 1)), Sg.Text(showResultsList[24])],
-                [Sg.Text(showResultsList[5], size=(15, 1)), Sg.Text(showResultsList[25])],
-                [Sg.Text(showResultsList[6], size=(15, 1)), Sg.Text(showResultsList[26])],
-                [Sg.Text(showResultsList[7], size=(15, 1)), Sg.Text(showResultsList[26])],
-                [Sg.Text(showResultsList[8], size=(15, 1)), Sg.Text(showResultsList[28])],
-                [Sg.Text(showResultsList[9], size=(15, 1)), Sg.Text(showResultsList[29])],
-                [Sg.Text(showResultsList[10], size=(15, 1)), Sg.Text(showResultsList[30])],
-                [Sg.Text(showResultsList[11], size=(15, 1)), Sg.Text(showResultsList[31])],
-                [Sg.Text(showResultsList[12], size=(15, 1)), Sg.Text(showResultsList[32])],
-                [Sg.Text(showResultsList[13], size=(15, 1)), Sg.Text(showResultsList[33])],
-                [Sg.Text(showResultsList[14], size=(15, 1)), Sg.Text(showResultsList[34])],
-                [Sg.Text(showResultsList[15], size=(15, 1)), Sg.Text(showResultsList[35])],
-                [Sg.Text(showResultsList[16], size=(15, 1)), Sg.Text(showResultsList[36])],
-                [Sg.Text(showResultsList[17], size=(15, 1)), Sg.Text(showResultsList[37])],
-                [Sg.Text(showResultsList[18], size=(15, 1)), Sg.Text(showResultsList[38])],
-                [Sg.Text(showResultsList[19], size=(15, 1)), Sg.Text(showResultsList[39])],
-]
+if showOnlyStreets:
+    resultsLayout = [
+                    [Sg.Text('Prob \t\t\tStreet')],
+                    [Sg.Text(showResultsList[0], size=(15, 1)), Sg.Text(showResultsList[14])],
+                    [Sg.Text(showResultsList[1], size=(15, 1)), Sg.Text(showResultsList[15])],
+                    [Sg.Text(showResultsList[2], size=(15, 1)), Sg.Text(showResultsList[16])],
+                    [Sg.Text(showResultsList[3], size=(15, 1)), Sg.Text(showResultsList[17])],
+                    [Sg.Text(showResultsList[4], size=(15, 1)), Sg.Text(showResultsList[18])],
+                    [Sg.Text(showResultsList[5], size=(15, 1)), Sg.Text(showResultsList[19])],
+                    [Sg.Text(showResultsList[6], size=(15, 1)), Sg.Text(showResultsList[20])],
+                    [Sg.Text(showResultsList[7], size=(15, 1)), Sg.Text(showResultsList[21])],
+                    [Sg.Text(showResultsList[8], size=(15, 1)), Sg.Text(showResultsList[22])],
+                    [Sg.Text(showResultsList[9], size=(15, 1)), Sg.Text(showResultsList[23])],
+                    [Sg.Text(showResultsList[10], size=(15, 1)), Sg.Text(showResultsList[24])],
+                    [Sg.Text(showResultsList[11], size=(15, 1)), Sg.Text(showResultsList[25])],
+                    [Sg.Text(showResultsList[12], size=(15, 1)), Sg.Text(showResultsList[26])],
+                    [Sg.Text(showResultsList[13], size=(15, 1)), Sg.Text(showResultsList[27])],
+                    ]
+else:
+    resultsLayout = [
+                    [Sg.Text('Prob \t\t\tStreet')],
+                    [Sg.Text(showResultsList[0], size=(15, 1)), Sg.Text(showResultsList[20])],
+                    [Sg.Text(showResultsList[1], size=(15, 1)), Sg.Text(showResultsList[21])],
+                    [Sg.Text(showResultsList[2], size=(15, 1)), Sg.Text(showResultsList[22])],
+                    [Sg.Text(showResultsList[3], size=(15, 1)), Sg.Text(showResultsList[23])],
+                    [Sg.Text(showResultsList[4], size=(15, 1)), Sg.Text(showResultsList[24])],
+                    [Sg.Text(showResultsList[5], size=(15, 1)), Sg.Text(showResultsList[25])],
+                    [Sg.Text(showResultsList[6], size=(15, 1)), Sg.Text(showResultsList[26])],
+                    [Sg.Text(showResultsList[7], size=(15, 1)), Sg.Text(showResultsList[26])],
+                    [Sg.Text(showResultsList[8], size=(15, 1)), Sg.Text(showResultsList[28])],
+                    [Sg.Text(showResultsList[9], size=(15, 1)), Sg.Text(showResultsList[29])],
+                    [Sg.Text(showResultsList[10], size=(15, 1)), Sg.Text(showResultsList[30])],
+                    [Sg.Text(showResultsList[11], size=(15, 1)), Sg.Text(showResultsList[31])],
+                    [Sg.Text(showResultsList[12], size=(15, 1)), Sg.Text(showResultsList[32])],
+                    [Sg.Text(showResultsList[13], size=(15, 1)), Sg.Text(showResultsList[33])],
+                    [Sg.Text(showResultsList[14], size=(15, 1)), Sg.Text(showResultsList[34])],
+                    [Sg.Text(showResultsList[15], size=(15, 1)), Sg.Text(showResultsList[35])],
+                    [Sg.Text(showResultsList[16], size=(15, 1)), Sg.Text(showResultsList[36])],
+                    [Sg.Text(showResultsList[17], size=(15, 1)), Sg.Text(showResultsList[37])],
+                    [Sg.Text(showResultsList[18], size=(15, 1)), Sg.Text(showResultsList[38])],
+                    [Sg.Text(showResultsList[19], size=(15, 1)), Sg.Text(showResultsList[39])],
+                    ]
 
 resultWindow = Sg.Window("Results").Layout(resultsLayout)
 resultWindow.Read()
