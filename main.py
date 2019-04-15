@@ -47,12 +47,14 @@ throws = 0
 chanceCardsDrawn = 0
 comChestCardsDrawn = 0
 progress = 0
+progressShow = 0
+firstThrow = 0
 
 #   start loop
 for _ in range(runs):
     same1 = False
     same2 = False
-#       throw dice
+    #       throw dice
     dice1 = random.randint(1, 6)
     dice2 = random.randint(1, 6)
     throw = dice1 + dice2
@@ -60,7 +62,7 @@ for _ in range(runs):
     if showMoves:
         print("Rolled " + str(throw))
 
-#       Two of same dice
+    #       Two of same dice
     if tripleJail:
         if dice1 == dice2 and same2:
             newPosIndex = 10
@@ -69,7 +71,7 @@ for _ in range(runs):
         if dice1 == dice2:
             same1 = True
 
-#       general movement
+    #       general movement
     posIndex = newPosIndex
     pos = streetsList[posIndex]
     if showMoves:
@@ -82,7 +84,7 @@ for _ in range(runs):
         diff = newPosIndex - 40
         newPosIndex = 0 + diff
 
-#       move when chance card draw
+    #       move when chance card draw
     if chanceCards:
         if newPosIndex == 7 or newPosIndex == 22 or newPosIndex == 36:
             cardDraw = random.randint(0, (len(chanceCardList)-1))
@@ -134,7 +136,7 @@ for _ in range(runs):
                 chanceCardList = list(copyChanceCardList)
                 chanceCardsDrawn = 0
 
-#       move when com chest cards draw
+    #       move when com chest cards draw
     if comChestCards:
         if newPosIndex == 2 or newPosIndex == 17 or newPosIndex == 33:
             cardDraw = random.randint(0, (len(comChestCardList) - 1))
@@ -152,25 +154,41 @@ for _ in range(runs):
                 comChestCardList = list(copyComChestCardList)
                 comChestCardsDrawn = 0
 
-#       find landing spot and add to result list
+    #       find landing spot and add to result list
     newPos = streetsList[newPosIndex]
     resultList.append(newPos)
 
-#       move - land on prison
+    #       move - land on prison
     if jail:
         if newPosIndex == 30:
             newPosIndex = 10
-    #       show end position
+        #       show end position
         if showMoves:
             print("Moved to " + newPos)
 
-#       show progress
+    #       show progress
     if showProgress:
-        Sg.OneLineProgressMeter('One Line Meter Example', progress, runs, 'key')
-        progress += 1
         print(progress)
 
-        progressLayout = []
+        progressLayout = [[Sg.Text('Progress', size=(20, 2), justification='center')],
+                          [Sg.Text('', size=(10, 2), font=('Helvetica', 20), justification='center', key='_OUTPUT_')],
+                          [Sg.T(' ' * 5), Sg.Quit()]]
+
+        if firstThrow == 0:
+            window = Sg.Window('Progress').Layout(progressLayout)
+
+        event, values = window.Read(timeout=10)  # Please try and use a timeout when possible
+        if event == 'Quit':  # if user closed the window using X or clicked Quit button
+            exit()
+
+        progress += 1
+        progressList = list(str(progress))
+        lookIndex = len(progressList) - 1
+        if progressList[lookIndex] == "0":
+            window.FindElement('_OUTPUT_').Update(progress)
+            firstThrow = 1
+
+
 
 #   create Probability list
 for x in streetsList:
