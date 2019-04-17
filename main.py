@@ -47,7 +47,6 @@ throws = 0
 chanceCardsDrawn = 0
 comChestCardsDrawn = 0
 progress = 0
-progressShow = 0
 firstThrow = 0
 
 #   start loop
@@ -177,18 +176,17 @@ for _ in range(runs):
         if firstThrow == 0:
             window = Sg.Window('Progress').Layout(progressLayout)
 
-        event, values = window.Read(timeout=10)  # Please try and use a timeout when possible
-        if event == 'Quit':  # if user closed the window using X or clicked Quit button
+        event, values = window.Read(timeout=0)
+        if event == 'Quit':
             exit()
 
         progress += 1
-        progressList = list(str(progress))
+        """progressList = list(str(progress))
         lookIndex = len(progressList) - 1
-        if progressList[lookIndex] == "0":
-            window.FindElement('_OUTPUT_').Update(progress)
-            firstThrow = 1
-
-
+        lookIndex2 = len(progressList) - 2
+        if progressList[lookIndex] == "0" and progressList[lookIndex2] == "0":"""
+        window.FindElement('_OUTPUT_').Update(progress)
+        firstThrow = 1
 
 #   create Probability list
 for x in streetsList:
@@ -201,12 +199,12 @@ if showOnlyStreets:
     del probList[38]
     del probList[36]
     del probList[33]
-    del probList[7]
     del probList[30]
     del probList[22]
     del probList[20]
     del probList[17]
     del probList[10]
+    del probList[7]
     del probList[4]
     del probList[2]
     del probList[0]
