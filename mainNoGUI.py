@@ -4,6 +4,7 @@ while True:
     from chanceCards import chanceCardList
     from comChestCards import comChestCardList
     import random
+    from tqdm import tqdm
 
 #   creating copies of chance- and comChestLists
     copyChanceCardList = list(chanceCardList)
@@ -32,7 +33,7 @@ while True:
     progress = 0
 
 #   start loop
-    for _ in range(runs):
+    for _ in tqdm(range(runs)):
         same1 = False
         same2 = False
 #       throw dice
@@ -144,8 +145,8 @@ while True:
             print("Moved to " + newPos)
 
 #       show progress
-        progress += 1
-        print(progress)
+#        progress += 1
+#        print(progress)
 
 #   create Probability list
     for x in streetsList:
