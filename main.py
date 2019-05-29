@@ -1,5 +1,6 @@
 #   import lists from other files
 from streets import streetsList
+from streets import street_colors
 from chanceCards import chanceCardList
 from comChestCards import comChestCardList
 import random
@@ -7,6 +8,7 @@ import PySimpleGUI as Sg
 import matplotlib.pyplot as plt
 from matplotlib import style
 import numpy as np
+from tqdm import tqdm
 
 style.use("ggplot")
 
@@ -55,7 +57,7 @@ progress = 0
 firstThrow = 0
 
 #   start loop
-for _ in range(runs):
+for _ in tqdm(range(runs)):
     same1 = False
     same2 = False
     #       throw dice
@@ -231,6 +233,7 @@ if showOnlyStreets:
 resultsFinal = sorted(zip(probList, streetsList))
 resultsFinal.reverse()
 
+results_bar = sorted(zip(probList, streetsList, street_colors))
 
 #   Show results
 print('Prob \t\tStreet')
@@ -288,18 +291,29 @@ else:
 resultWindow = Sg.Window("Results").Layout(resultsLayout)
 resultWindow.Read()
 
+zero_tuple = ("0", "None", "white")
+results_bar.insert(0, zero_tuple)
 
-common_streets = [topic[1] for topic in resultsFinal]
-common_streets = common_streets[:10]
+
+common_streets = [topic[1] for topic in results_bar]
 y_pos = np.arange(len(common_streets))
-street_prob = [topic[0] for topic in resultsFinal]
-street_prob = street_prob[:10]
+street_prob = [topic[0] for topic in results_bar]
+bar_color = [topic[2] for topic in results_bar]
 
 
 plt.figure(figsize=(12, 7))
-plt.bar(y_pos, street_prob, align="center", alpha=1)
-plt.xticks(y_pos, common_streets)
-plt.ylabel("Probability")
-plt.title("Monopoly Streets Probability")
+plt.bar(y_pos, street_prob, align="center", alpha=1, color=bar_color)
+
+
+plt.xticks(y_pos, common_streets, rotation="vertical")
+plt.ylabel("Probability %")
+
+label = ["1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", ]
+
+for i in range(len(y_pos)):
+    plt.text(x=y_pos[i], y=results_bar[i][0], s=label[i], size=6, rotation="vertical")
+
+
+plt.title(f"Monopoly Streets Probability \n {runs} throws")
 plt.show()
 
