@@ -47,6 +47,7 @@ copyComChestCardList = list(comChestCardList)
 #   creating the Result list and the ProbabilityList
 resultList = []
 probList = []
+street_occur_list = []
 
 #   defining original values for different variables
 newPosIndex = 0
@@ -198,8 +199,10 @@ for _ in tqdm(range(runs)):
 #   create Probability list
 for x in streetsList:
     streetOccur = resultList.count(x)
+    street_occur_list.append(str(streetOccur))
     streetProb = "%.2f" % float(float(streetOccur / throws) * 100)
     probList.append(streetProb)
+
 
 #   delete all non-streets
 if showOnlyStreets:
@@ -233,7 +236,7 @@ if showOnlyStreets:
 resultsFinal = sorted(zip(probList, streetsList))
 resultsFinal.reverse()
 
-results_bar = sorted(zip(probList, streetsList, street_colors))
+results_bar = sorted(zip(probList, streetsList, street_colors, street_occur_list))
 
 #   Show results
 print('Prob \t\tStreet')
@@ -291,28 +294,34 @@ else:
 resultWindow = Sg.Window("Results").Layout(resultsLayout)
 resultWindow.Read()
 
-zero_tuple = ("0", "None", "white")
+zero_tuple = ("0", "None", "white", "0")
 results_bar.insert(0, zero_tuple)
 
+print(results_bar)
 
 common_streets = [topic[1] for topic in results_bar]
 y_pos = np.arange(len(common_streets))
 street_prob = [topic[0] for topic in results_bar]
 bar_color = [topic[2] for topic in results_bar]
+street_occur = [topic[3] for topic in results_bar]
+
+print(street_prob)
+print(probList)
+
+print(type(street_occur[1]))
 
 
 plt.figure(figsize=(12, 7))
 plt.bar(y_pos, street_prob, align="center", alpha=1, color=bar_color)
 
-
 plt.xticks(y_pos, common_streets, rotation="vertical")
 plt.ylabel("Probability %")
+plt.axis(y_min=0, y_max=100)
 
-label = ["1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", ]
+label = ["1", "1", "1000", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", ]
 
 for i in range(len(y_pos)):
-    plt.text(x=y_pos[i], y=results_bar[i][0], s=label[i], size=6, rotation="vertical")
-
+    plt.text(x=y_pos[i], y=street_prob[i], s=label[i], size=6, rotation="vertical")
 
 plt.title(f"Monopoly Streets Probability \n {runs} throws")
 plt.show()
