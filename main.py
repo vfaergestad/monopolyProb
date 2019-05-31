@@ -232,6 +232,20 @@ if showOnlyStreets:
     del streetsList[2]
     del streetsList[0]
 
+    del street_colors[38]
+    del street_colors[36]
+    del street_colors[33]
+    del street_colors[30]
+    del street_colors[22]
+    del street_colors[20]
+    del street_colors[17]
+    del street_colors[10]
+    del street_colors[7]
+    del street_colors[4]
+    del street_colors[2]
+    del street_colors[0]
+
+
 #   sort, zip and reverse results
 resultsFinal = sorted(zip(probList, streetsList))
 resultsFinal.reverse()
@@ -294,21 +308,21 @@ else:
 resultWindow = Sg.Window("Results").Layout(resultsLayout)
 resultWindow.Read()
 
-zero_tuple = ("0", "None", "white", "0")
-results_bar.insert(0, zero_tuple)
-
-print(results_bar)
 
 common_streets = [topic[1] for topic in results_bar]
 y_pos = np.arange(len(common_streets))
-street_prob = [topic[0] for topic in results_bar]
+print(len(common_streets))
+street_prob_1 = [topic[0] for topic in results_bar]
+street_prob = []
+for x in street_prob_1:
+    street_prob.append(float(x))
+print(len(street_prob))
 bar_color = [topic[2] for topic in results_bar]
-street_occur = [topic[3] for topic in results_bar]
-
-print(street_prob)
-print(probList)
-
-print(type(street_occur[1]))
+street_occur_1 = [topic[3] for topic in results_bar]
+street_occur = []
+for x in street_occur_1:
+    street_occur.append(int(x))
+print(len(street_occur))
 
 
 plt.figure(figsize=(12, 7))
@@ -316,13 +330,10 @@ plt.bar(y_pos, street_prob, align="center", alpha=1, color=bar_color)
 
 plt.xticks(y_pos, common_streets, rotation="vertical")
 plt.ylabel("Probability %")
-plt.axis(y_min=0, y_max=100)
 
-label = ["1", "1", "1000", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", ]
 
 for i in range(len(y_pos)):
-    plt.text(x=y_pos[i], y=street_prob[i], s=label[i], size=6, rotation="vertical")
+    plt.text(x=y_pos[i]-0.1, y=street_prob[i] + 0.1, s=street_occur[i], size=6, rotation="vertical")
 
 plt.title(f"Monopoly Streets Probability \n {runs} throws")
 plt.show()
-
