@@ -47,6 +47,7 @@ copyComChestCardList = list(comChestCardList)
 #   creating the Result list and the ProbabilityList
 resultList = []
 probList = []
+street_occur_list = []
 
 #   defining original values for different variables
 newPosIndex = 0
@@ -65,8 +66,6 @@ for _ in tqdm(range(runs)):
     dice2 = random.randint(1, 6)
     throw = dice1 + dice2
     throws += 1
-    if showMoves:
-        print("Rolled " + str(throw))
 
     #       Two of same dice
     if tripleJail:
@@ -80,8 +79,6 @@ for _ in tqdm(range(runs)):
     #       general movement
     posIndex = newPosIndex
     pos = streetsList[posIndex]
-    if showMoves:
-        print("Moved from " + pos)
     if not same2:
         newPosIndex = posIndex + throw
     if same2:
@@ -169,34 +166,47 @@ for _ in tqdm(range(runs)):
         if newPosIndex == 30:
             newPosIndex = 10
         #       show end position
-        if showMoves:
-            print("Moved to " + newPos)
 
     #   create Probability list
     for x in streetsList:
         streetOccur = resultList.count(x)
+        street_occur_list.append(str(streetOccur))
         streetProb = "%.2f" % float(float(streetOccur / throws) * 100)
         probList.append(streetProb)
 
     #   sort, zip and reverse results
-    results_bar = sorted(zip(probList, streetsList, street_colors))
+    resultsFinal = sorted(zip(probList, streetsList))
+    resultsFinal.reverse()
 
-    zero_tuple = ("0", "None", "white")
-    results_bar.insert(0, zero_tuple)
+    results_bar = sorted(zip(probList, streetsList, street_colors, street_occur_list))
 
     common_streets = [topic[1] for topic in results_bar]
     y_pos = np.arange(len(common_streets))
-    street_prob = [topic[0] for topic in results_bar]
+    street_prob_1 = [topic[0] for topic in results_bar]
+    street_prob = []
+    for x in street_prob_1:
+        street_prob.append(float(x))
     bar_color = [topic[2] for topic in results_bar]
+    street_occur_1 = [topic[3] for topic in results_bar]
+    street_occur = []
+    for x in street_occur_1:
+        street_occur.append(int(x))
 
     plt.figure(figsize=(12, 7))
     plt.bar(y_pos, street_prob, align="center", alpha=1, color=bar_color)
 
     plt.xticks(y_pos, common_streets, rotation="vertical")
     plt.ylabel("Probability %")
-    plt.title(f"Monopoly Streets Probability \n {throws} throws")
+
+    for i in range(len(y_pos)):
+        plt.text(x=y_pos[i]-0.1, y=street_prob[i] + 0.1, s=street_occur[i], size=6, rotation="vertical")
+
+    plt.title(f"Monopoly Streets Probability \n {runs} throws")
     plt.savefig(f"graph_video/images/{throws}.png")
     plt.close()
 
     probList = []
+    street_occur = []
+    street_prob = []
+
 
