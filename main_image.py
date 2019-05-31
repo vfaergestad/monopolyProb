@@ -174,11 +174,8 @@ for _ in tqdm(range(runs)):
         streetProb = "%.2f" % float(float(streetOccur / throws) * 100)
         probList.append(streetProb)
 
-    #   sort, zip and reverse results
-    resultsFinal = sorted(zip(probList, streetsList))
-    resultsFinal.reverse()
-
     results_bar = sorted(zip(probList, streetsList, street_colors, street_occur_list))
+
 
     common_streets = [topic[1] for topic in results_bar]
     y_pos = np.arange(len(common_streets))
@@ -201,12 +198,13 @@ for _ in tqdm(range(runs)):
     for i in range(len(y_pos)):
         plt.text(x=y_pos[i]-0.1, y=street_prob[i] + 0.1, s=street_occur[i], size=6, rotation="vertical")
 
-    plt.title(f"Monopoly Streets Probability \n {runs} throws")
+    plt.title(f"Monopoly Streets Probability \n {throws} throws")
     plt.savefig(f"graph_video/images/{throws}.png")
     plt.close()
 
     probList = []
     street_occur = []
     street_prob = []
+    street_occur_list = []
 
 
