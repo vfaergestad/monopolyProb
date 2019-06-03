@@ -16,8 +16,7 @@ style.use("ggplot")
 layout = [
     [Sg.Text("How many throws do you want to make?")],
     [Sg.Input(1000)],
-    [Sg.Checkbox("Show Moves"), Sg.Checkbox("Show Progress"), Sg.Checkbox("Show Buy-Able Streets Only")],
-    [Sg.Text("Rules:")],
+    [Sg.Checkbox("Show Moves"), Sg.Checkbox("Show Progress"), Sg.Checkbox("Show Streets Only")],
     [Sg.Checkbox("Jail", default=True), Sg.Checkbox("Triple Dice Jail", default=True),
      Sg.Checkbox("Community Chest Cards", default=True), Sg.Checkbox("Chance Cards", default=True)],
     [Sg.Text("(Showing Progress will make the calculation slower)")],
@@ -61,8 +60,8 @@ comChestCardsDrawn = 0
 progress = 0
 firstThrow = 0
 
-#   start loop
-for _ in tqdm(range(runs)):
+
+def throw():
     same1 = False
     same2 = False
     #       throw dice
@@ -200,16 +199,7 @@ for _ in tqdm(range(runs)):
         window.FindElement('_OUTPUT_').Update(progress)
         firstThrow = 1
 
-#   create Probability list
-for x in street_list:
-    streetOccur = resultList.count(x)
-    street_occur_list.append(str(streetOccur))
-    streetProb = "%.2f" % float(float(streetOccur / throws) * 100)
-    prob_list.append(streetProb)
-
-
-#   delete all non-streets
-if showOnlyStreets:
+def delete_nonstreets():
     del prob_list[38]
     del prob_list[36]
     del prob_list[33]
@@ -250,74 +240,81 @@ if showOnlyStreets:
     del street_colors[0]
 
 
-#   sort, zip and reverse results
-results_final = sorted(zip(prob_list, street_list))
-results_final.reverse()
+def create_prob_list():
+    for x in street_list:
+        streetOccur = resultList.count(x)
+        street_occur_list.append(str(streetOccur))
+        streetProb = "%.2f" % float(float(streetOccur / throws) * 100)
+        prob_list.append(streetProb)
 
-results_bar = sorted(zip(prob_list, street_list, street_colors, street_occur_list))
 
-#   Show results
-print('Prob \t\tStreet')
-for prob, street in results_final:
-    print(str(prob) + '        ' + street)
+def sortzip_results():
+    results_final = sorted(zip(prob_list, street_list))
+    results_final.reverse()
+    results_bar = sorted(zip(prob_list, street_list, street_colors, street_occur_list))
 
-show_results_list = []
-for prob, street in results_final:
-    show_results_list.append(str(prob) + '      ' + street)
 
-if showOnlyStreets:
-    resultsLayout = [
-        [Sg.Text("Results:")],
-        [Sg.Text('Prob \t\t\tStreet')],
-        [Sg.Text(show_results_list[0], size=(15, 1)), Sg.Text(show_results_list[14])],
-        [Sg.Text(show_results_list[1], size=(15, 1)), Sg.Text(show_results_list[15])],
-        [Sg.Text(show_results_list[2], size=(15, 1)), Sg.Text(show_results_list[16])],
-        [Sg.Text(show_results_list[3], size=(15, 1)), Sg.Text(show_results_list[17])],
-        [Sg.Text(show_results_list[4], size=(15, 1)), Sg.Text(show_results_list[18])],
-        [Sg.Text(show_results_list[5], size=(15, 1)), Sg.Text(show_results_list[19])],
-        [Sg.Text(show_results_list[6], size=(15, 1)), Sg.Text(show_results_list[20])],
-        [Sg.Text(show_results_list[7], size=(15, 1)), Sg.Text(show_results_list[21])],
-        [Sg.Text(show_results_list[8], size=(15, 1)), Sg.Text(show_results_list[22])],
-        [Sg.Text(show_results_list[9], size=(15, 1)), Sg.Text(show_results_list[23])],
-        [Sg.Text(show_results_list[10], size=(15, 1)), Sg.Text(show_results_list[24])],
-        [Sg.Text(show_results_list[11], size=(15, 1)), Sg.Text(show_results_list[25])],
-        [Sg.Text(show_results_list[12], size=(15, 1)), Sg.Text(show_results_list[26])],
-        [Sg.Text(show_results_list[13], size=(15, 1)), Sg.Text(show_results_list[27])],
-        [Sg.Button("Show Graph")]
-    ]
-else:
-    resultsLayout = [
-        [Sg.Text("Results:")],
-        [Sg.Text('Prob \tStreet')],
-        [Sg.Text(show_results_list[0], size=(15, 1)), Sg.Text(show_results_list[20])],
-        [Sg.Text(show_results_list[1], size=(15, 1)), Sg.Text(show_results_list[21])],
-        [Sg.Text(show_results_list[2], size=(15, 1)), Sg.Text(show_results_list[22])],
-        [Sg.Text(show_results_list[3], size=(15, 1)), Sg.Text(show_results_list[23])],
-        [Sg.Text(show_results_list[4], size=(15, 1)), Sg.Text(show_results_list[24])],
-        [Sg.Text(show_results_list[5], size=(15, 1)), Sg.Text(show_results_list[25])],
-        [Sg.Text(show_results_list[6], size=(15, 1)), Sg.Text(show_results_list[26])],
-        [Sg.Text(show_results_list[7], size=(15, 1)), Sg.Text(show_results_list[26])],
-        [Sg.Text(show_results_list[8], size=(15, 1)), Sg.Text(show_results_list[28])],
-        [Sg.Text(show_results_list[9], size=(15, 1)), Sg.Text(show_results_list[29])],
-        [Sg.Text(show_results_list[10], size=(15, 1)), Sg.Text(show_results_list[30])],
-        [Sg.Text(show_results_list[11], size=(15, 1)), Sg.Text(show_results_list[31])],
-        [Sg.Text(show_results_list[12], size=(15, 1)), Sg.Text(show_results_list[32])],
-        [Sg.Text(show_results_list[13], size=(15, 1)), Sg.Text(show_results_list[33])],
-        [Sg.Text(show_results_list[14], size=(15, 1)), Sg.Text(show_results_list[34])],
-        [Sg.Text(show_results_list[15], size=(15, 1)), Sg.Text(show_results_list[35])],
-        [Sg.Text(show_results_list[16], size=(15, 1)), Sg.Text(show_results_list[36])],
-        [Sg.Text(show_results_list[17], size=(15, 1)), Sg.Text(show_results_list[37])],
-        [Sg.Text(show_results_list[18], size=(15, 1)), Sg.Text(show_results_list[38])],
-        [Sg.Text(show_results_list[19], size=(15, 1)), Sg.Text(show_results_list[39])],
-        [Sg.Button("Show Graph")],
-        [Sg.Text("(Closes Window)")]
-    ]
+def show_results():
+    print('Prob \t\tStreet')
+    for prob, street in results_final:
+        print(str(prob) + '        ' + street)
 
-resultWindow = Sg.Window("Results").Layout(resultsLayout)
-button = resultWindow.Read()
+    show_results_list = []
+    for prob, street in results_final:
+        show_results_list.append(str(prob) + '      ' + street)
 
-if button[0] == "Show Graph":
-    Sg.Window.Close(resultWindow)
+    if showOnlyStreets:
+        resultsLayout = [
+            [Sg.Text("Results:")],
+            [Sg.Text('Prob \t\t\tStreet')],
+            [Sg.Text(show_results_list[0], size=(15, 1)), Sg.Text(show_results_list[14])],
+            [Sg.Text(show_results_list[1], size=(15, 1)), Sg.Text(show_results_list[15])],
+            [Sg.Text(show_results_list[2], size=(15, 1)), Sg.Text(show_results_list[16])],
+            [Sg.Text(show_results_list[3], size=(15, 1)), Sg.Text(show_results_list[17])],
+            [Sg.Text(show_results_list[4], size=(15, 1)), Sg.Text(show_results_list[18])],
+            [Sg.Text(show_results_list[5], size=(15, 1)), Sg.Text(show_results_list[19])],
+            [Sg.Text(show_results_list[6], size=(15, 1)), Sg.Text(show_results_list[20])],
+            [Sg.Text(show_results_list[7], size=(15, 1)), Sg.Text(show_results_list[21])],
+            [Sg.Text(show_results_list[8], size=(15, 1)), Sg.Text(show_results_list[22])],
+            [Sg.Text(show_results_list[9], size=(15, 1)), Sg.Text(show_results_list[23])],
+            [Sg.Text(show_results_list[10], size=(15, 1)), Sg.Text(show_results_list[24])],
+            [Sg.Text(show_results_list[11], size=(15, 1)), Sg.Text(show_results_list[25])],
+            [Sg.Text(show_results_list[12], size=(15, 1)), Sg.Text(show_results_list[26])],
+            [Sg.Text(show_results_list[13], size=(15, 1)), Sg.Text(show_results_list[27])],
+            [Sg.Button("Show Graph")]
+        ]
+    else:
+        resultsLayout = [
+            [Sg.Text("Results:")],
+            [Sg.Text('Prob \tStreet')],
+            [Sg.Text(show_results_list[0], size=(15, 1)), Sg.Text(show_results_list[20])],
+            [Sg.Text(show_results_list[1], size=(15, 1)), Sg.Text(show_results_list[21])],
+            [Sg.Text(show_results_list[2], size=(15, 1)), Sg.Text(show_results_list[22])],
+            [Sg.Text(show_results_list[3], size=(15, 1)), Sg.Text(show_results_list[23])],
+            [Sg.Text(show_results_list[4], size=(15, 1)), Sg.Text(show_results_list[24])],
+            [Sg.Text(show_results_list[5], size=(15, 1)), Sg.Text(show_results_list[25])],
+            [Sg.Text(show_results_list[6], size=(15, 1)), Sg.Text(show_results_list[26])],
+            [Sg.Text(show_results_list[7], size=(15, 1)), Sg.Text(show_results_list[26])],
+            [Sg.Text(show_results_list[8], size=(15, 1)), Sg.Text(show_results_list[28])],
+            [Sg.Text(show_results_list[9], size=(15, 1)), Sg.Text(show_results_list[29])],
+            [Sg.Text(show_results_list[10], size=(15, 1)), Sg.Text(show_results_list[30])],
+            [Sg.Text(show_results_list[11], size=(15, 1)), Sg.Text(show_results_list[31])],
+            [Sg.Text(show_results_list[12], size=(15, 1)), Sg.Text(show_results_list[32])],
+            [Sg.Text(show_results_list[13], size=(15, 1)), Sg.Text(show_results_list[33])],
+            [Sg.Text(show_results_list[14], size=(15, 1)), Sg.Text(show_results_list[34])],
+            [Sg.Text(show_results_list[15], size=(15, 1)), Sg.Text(show_results_list[35])],
+            [Sg.Text(show_results_list[16], size=(15, 1)), Sg.Text(show_results_list[36])],
+            [Sg.Text(show_results_list[17], size=(15, 1)), Sg.Text(show_results_list[37])],
+            [Sg.Text(show_results_list[18], size=(15, 1)), Sg.Text(show_results_list[38])],
+            [Sg.Text(show_results_list[19], size=(15, 1)), Sg.Text(show_results_list[39])],
+            [Sg.Button("Show Graph")]
+        ]
+
+    resultWindow = Sg.Window("Results").Layout(resultsLayout)
+    button = resultWindow.Read()
+
+def define_graph():
+    Sg.Window.Close(window)
 
     common_streets = [topic[1] for topic in results_bar]
     y_pos = np.arange(len(common_streets))
@@ -341,5 +338,29 @@ if button[0] == "Show Graph":
         plt.text(x=y_pos[i]-0.1, y=street_prob[i] + 0.1, s=street_occur[i], size=6, rotation="vertical")
 
     plt.title(f"Monopoly Streets Probability \n {runs} throws")
+
+def show_graph():
     plt.show()
 
+#   start loop
+for _ in tqdm(range(runs)):
+    throw()
+
+#   create Probability list
+create_prob_list()
+
+
+#   delete all non-streets
+if showOnlyStreets:
+    delete_nonstreets()
+
+#   sort, zip and reverse results
+sortzip_results()
+
+#   Show results
+show_results()
+
+define_graph()
+
+if button[0] == "Show Graph":
+    show_graph()

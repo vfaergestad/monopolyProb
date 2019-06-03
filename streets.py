@@ -1,4 +1,4 @@
-streetsList = ["start",
+street_list = ["start",
                "brown1",
                "chest1",
                "brown2",

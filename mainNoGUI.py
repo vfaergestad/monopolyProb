@@ -1,6 +1,6 @@
 while True:
 #   import lists from other files
-    from streets import streetsList
+    from streets import street_list
     from chanceCards import chanceCardList
     from comChestCards import comChestCardList
     import random
