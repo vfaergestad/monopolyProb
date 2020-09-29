@@ -340,6 +340,9 @@ if button[0] == "Show Graph":
     for i in range(len(y_pos)):
         plt.text(x=y_pos[i]-0.1, y=street_prob[i] + 0.1, s=street_occur[i], size=6, rotation="vertical")
 
+
+
+
     plt.title(f"Monopoly Streets Probability \n {runs} throws")
     plt.show()
 
